@@ -1,0 +1,23 @@
+{
+    "manifest_version": 2,
+
+    "name": "Gadgetron Autofill",
+    "description": "This extension automatically submits a form to order a robot!",
+    "version": "1.0",
+
+    "background" : {
+      "scripts": ["js/background.js"],
+      "persistent": false
+    },
+
+    "page_action": {
+        "default_icon": "img/icon.png",
+        "default_popup": "popup.html",
+        "default_title": "Order Robots!"
+    },
+    "permissions": [
+        "activeTab",
+        "https://ajax.googleapis.com/",
+        "declarativeContent"
+    ]
+}
