@@ -13,7 +13,7 @@
     "content_scripts": [
         {
             "matches": ["https://www.my4pcb.com/*"],
-            "js": ["js/jquery-3.0.0.min.js","js/inject/upload.js"]
+            "js": ["js/inject/fillForm.js"]
         }
     ],
 

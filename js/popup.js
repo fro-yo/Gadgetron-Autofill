@@ -1,3 +1,5 @@
+/*jshint esversion: 6 */
+
 // array of json to be processed
 var jsonArray;
 
@@ -13,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const fileUrl = document.getElementById("jsonUrl").value;
         if (fileUrl === "") {
             var error = document.getElementById("error");
-            error.innerHTML = "Please enter url"
+            error.innerHTML = "Please enter url";
         }
 
         downloadZipfiles (fileUrl);
@@ -27,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById("fill").addEventListener ("click", function (){
 
         if (jsonArray.length === 0) {
-            message.innerHTML = "No robot data found"
+            message.innerHTML = "No robot data found";
         }
 
         console.log ("clicked ");
@@ -35,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // sending message with json array
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
             chrome.tabs.sendMessage(tabs[0].id, {data: jsonArray[0]}, function(response) {
-                if (response != undefined)
+                if (response !== undefined)
                     console.log(response.farewell);
             });
         });
@@ -51,21 +53,19 @@ var downloadZipfiles = function (fileUrl) {
     jsonArray = JSON.parse(xhr.responseText);
 
     // downloading each zipfile
-    /*
     for (let count = 0; count < jsonArray.length; count++) {
         zipfileUrl = jsonArray[count].zipfile;
         zipfile = getZipFile (zipfileUrl);
         chrome.downloads.download({
             url: zipfileUrl,
             filename: "gadgetronZipFiles/"+zipfile,
-            conflictAction: "overwrite",
+            conflictAction: "overwrite"
         }, function () {
             console.log ("Done"+count)
         });
     }
-    */
 
-}
+};
 
 
 /**
