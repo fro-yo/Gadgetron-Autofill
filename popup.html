@@ -2,10 +2,13 @@
 <html>
 <head>
     <title>Gadgetron Autofill</title>
-    <style>
+
+    <link rel="stylesheet" href="https://unpkg.com/purecss@0.6.1/build/pure-min.css" integrity="sha384-CCTZv2q9I9m3UOxRLaJneXrrqKwUNOzZ6NGEUMwHtShDJ+nCoiXJCAgi05KfkLGY" crossorigin="anonymous">
+    <style scoped>
     body {
         font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
-        font-size: 100%;
+        background-color: #f8fbc8;
+        font-size: 85%;
     }
 
     #status {
@@ -25,11 +28,25 @@
         padding: 5px;
     }
 
-    button {
+    .pure-button {
+        color: white;
         margin-left: 10px;
+        border-radius: 3px;
+        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+        background: rgb(66, 184, 221);
+        font-size: 80%;
     }
 
-    #message {
+
+    #progress > div{
+        font-size: 12px;
+        padding: 2px;
+    }
+
+    div.pending {
+        color: red;
+    }
+    div.done {
         color: green;
     }
 
@@ -38,16 +55,15 @@
 </head>
 
 <body>
-    <div id="status">Welcome</div>
+    <div id="welcome">Welcome, enter the URL with the robot data below</div>
     <input id="jsonUrl" type="text"></input>
-    <button id="submitButton"> Submit! </button>
+    <button id="submitButton" class="pure-button"> Submit! </button>
     <div id="error"></div>
     <div id="message"></div>
     <div id="currentRobot"></div>
-    
+
     <span>
-    <button id="fill" style="visibility=false;"> Fill form! </button>
-    <button id="next">Next Robot</button>
+    <button id="fill" class="pure-button"> Fill form! </button>
     </span>
 
 </body>
