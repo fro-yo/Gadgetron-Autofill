@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function () {
         currentRobot = 0;
 
         messageElement.innerHTML = (jsonArray.length - currentRobot) +" robots remaining";
-        currentElement.innerHTML = "Upload "+ robotNames[currentRobot] + " then click 'Fill Form!' on the form page";
+        currentElement.innerHTML = "Upload "+ robotNames[currentRobot] + " then click 'Fill Form!' when on the form page";
 
         updateLocalStorage();
     });
@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 messageElement.innerHTML = (jsonArray.length - currentRobot) +" robots remaining";
-                currentElement.innerHTML = "Upload "+ robotNames[currentRobot] + " then click 'Fill Form!' on the form page";
+                currentElement.innerHTML = "Upload "+ robotNames[currentRobot] + " then click 'Fill Form!' when on the form page";
                 updateLocalStorage();
 
             });
