@@ -4,8 +4,9 @@
 var jsonArray;
 var robotNames = [];
 
-// message div
+// message and progress div
 var messageElement;
+var progressElement;
 
 // current robot to be ordered
 var currentElement;
@@ -15,6 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     messageElement = document.getElementById("message");
     currentElement = document.getElementById("currentRobot");
+    progressElement = document.getElementById("progress");
 
     currentRobot = localStorage.getItem ("currentRobot") || 0;
 
@@ -29,6 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     messageElement.innerHTML = localStorage.getItem ("message") || "";
     currentElement.innerHTML = localStorage.getItem ("currentRobotMessage") || "";
+    progressElement.innerHTML = localStorage.getItem ("progress");
 
     console.log ("Loaded.\njsonArray has "+jsonArray.length+ " elements");
 
@@ -41,19 +44,13 @@ document.addEventListener('DOMContentLoaded', function () {
             error.innerHTML = "Please enter url";
         }
 
-        let removeProgress = document.getElementById ("progress");
-        if (removeProgress !== null)
-            document.body.removeChild (removeProgress);
+        progressElement.innerHTML = "";
 
         robotNames = [];
         localStorage.setItem ("robotNames", robotNames.toString());
 
         downloadZipfiles (fileUrl);
         document.getElementById("fill").style.visibility = "true";
-
-        let progress = document.createElement ("DIV");
-        document.body.appendChild(progress);
-        progress.id = "progress";
 
         for (let i = 0 ; i < robotNames.length; i++) {
             let nameDiv = document.createElement("DIV");
@@ -101,11 +98,22 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     });
+
+
+    document.getElementById("prev").addEventListener ("click", function (){
+
+        if (currentRobot > 0) {
+            currentRobot--;
+            localStorage.setItem ("currentRobot", currentRobot);
+            document.getElementById ("robot"+currentRobot).className = "pending";
+        }
+    });
 });
 
 function updateLocalStorage () {
     localStorage.setItem ("message", messageElement.innerHTML);
     localStorage.setItem ("currentRobotMessage", currentElement.innerHTML);
+    localStorage.setItem ("progress", progressElement.innerHTML);
     localStorage.setItem ("currentRobot", currentRobot);
     localStorage.setItem ("jsonArray", JSON.stringify(jsonArray));
     localStorage.setItem ("robotNames", robotNames.toString());
