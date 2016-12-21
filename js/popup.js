@@ -2,13 +2,29 @@
 
 // array of json to be processed
 var jsonArray;
+var robotNames = [];
 
 // message div
-var message;
+var messageElement;
+
+// current robot to be ordered
+var currentElement;
+var currentRobot = 0;
 
 document.addEventListener('DOMContentLoaded', function () {
 
-    message = document.getElementById("message");
+    messageElement = document.getElementById("message");
+    currentElement = document.getElementById("currentRobot");
+
+    currentRobot = localStorage.getItem ("currentRobot") || 0;
+    robotNames = localStorage.getItem ("robotNames") || [];
+    jsonArray = JSON.parse(localStorage.getItem ("jsonArray")) || [];
+
+    messageElement.innerHTML = localStorage.getItem ("message") || "";
+    currentElement.innerHTML = localStorage.getItem ("currentRobotMessage") || "";
+
+    console.log ("Loaded.\njsonArray has "+jsonArray.length+ " elements");
+
     document.getElementById("submitButton").addEventListener("click", function () {
 
         // getting the link
@@ -19,9 +35,13 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         downloadZipfiles (fileUrl);
-        message.innerHTML = "Downloaded "+jsonArray.length+" zipfiles";
         document.getElementById("fill").style.visibility = "true";
+        currentRobot = 0;
 
+        messageElement.innerHTML = (jsonArray.length - currentRobot) +" robots remaining";
+        currentElement.innerHTML = "Upload "+ robotNames[currentRobot] + " then click 'fill' on the form page";
+
+        updateLocalStorage();
     });
 
 
@@ -29,20 +49,38 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById("fill").addEventListener ("click", function (){
 
         if (jsonArray.length === 0) {
-            message.innerHTML = "No robot data found";
+            messageElement.innerHTML = "No robot data found";
         }
-
-        console.log ("clicked ");
 
         // sending message with json array
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-            chrome.tabs.sendMessage(tabs[0].id, {data: jsonArray[0]}, function(response) {
-                if (response !== undefined)
-                    console.log(response.farewell);
+            chrome.tabs.sendMessage(tabs[0].id, {data: jsonArray[currentRobot]}, function(response) {
+
+                currentRobot++;
+
+                if (currentRobot >= jsonArray.length) {
+                    localStorage.clear();
+                    messageElement.innerHTML = "Done! Enter another link for next batch of robots";
+                    currentElement.innerHTML = "";
+                    return;
+                }
+
+                messageElement.innerHTML = (jsonArray.length - currentRobot) +" robots remaining";
+                currentElement.innerHTML = "Upload "+ robotNames[currentRobot] + " then click 'fill' on the form page";
+                updateLocalStorage();
+
             });
         });
     });
 });
+
+function updateLocalStorage () {
+    localStorage.setItem ("message", messageElement.innerHTML);
+    localStorage.setItem ("currentRobotMessage", currentElement.innerHTML);
+    localStorage.setItem ("currentRobot", currentRobot);
+    localStorage.setItem ("jsonArray", JSON.stringify(jsonArray));
+    localStorage.setItem ("robotNames", robotNames);
+}
 
 var downloadZipfiles = function (fileUrl) {
 
@@ -56,6 +94,7 @@ var downloadZipfiles = function (fileUrl) {
     for (let count = 0; count < jsonArray.length; count++) {
         zipfileUrl = jsonArray[count].zipfile;
         zipfile = getZipFile (zipfileUrl);
+        robotNames.push(zipfile);
         chrome.downloads.download({
             url: zipfileUrl,
             filename: "gadgetronZipFiles/"+zipfile,
